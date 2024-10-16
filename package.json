@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.44.2",
-    "@whiskeysockets/baileys": "^6.7.5",
+    "@whiskeysockets/baileys": "^6.7.8",
     "cron": "^3.1.7",
     "express": "^4.19.2",
     "link-preview-js": "^3.0.5",
