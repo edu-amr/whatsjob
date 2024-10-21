@@ -101,7 +101,7 @@ export async function handleIncomingMessage(socket: WASocket, message: WAMessage
       await socket.sendMessage(senderId as string, { text: responseMessage });
       await delay(1500);
     }
-  } else {
+  }  else if (!message.key.fromMe) {
     console.log("A mensagem não atende aos critérios:", {
       fromMe: message.key.fromMe,
       senderId,

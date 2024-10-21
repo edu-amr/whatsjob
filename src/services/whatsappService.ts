@@ -2,6 +2,7 @@ import { Boom } from '@hapi/boom';
 import makeWASocket, { DisconnectReason, useMultiFileAuthState, WAMessage, WASocket } from '@whiskeysockets/baileys';
 
 let socket: WASocket | null = null;
+let isSocketConnected = false;
 
 async function connectToWhatsApp(handleIncomingMessage: (socket: WASocket, message: WAMessage) => Promise<void>) {
   const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys');
@@ -14,11 +15,18 @@ async function connectToWhatsApp(handleIncomingMessage: (socket: WASocket, messa
   socket.ev.on('connection.update', (update) => {
     const { connection, lastDisconnect } = update;
     if (connection === 'close') {
+      isSocketConnected = false;
       const shouldReconnect =
         (lastDisconnect?.error as Boom)?.output?.statusCode !== DisconnectReason.loggedOut;
-      if (shouldReconnect) connectToWhatsApp(handleIncomingMessage);
+      if (shouldReconnect) {
+        console.log('Conexão fechada. Reconectando em 5 segundos...');
+        setTimeout(() => connectToWhatsApp(handleIncomingMessage), 5000);
+      } else {
+        console.log('Conexão fechada. Não será reconectado.');
+      }
     } else if (connection === 'open') {
-      console.log('Connection opened');
+      isSocketConnected = true;
+      console.log('Conexão aberta');
     }
   });
 
@@ -30,8 +38,6 @@ async function connectToWhatsApp(handleIncomingMessage: (socket: WASocket, messa
       await handleIncomingMessage(socket, message);
     }
   });
-
-  return socket;
 }
 
 function whatsappSocket(): WASocket {
@@ -41,4 +47,8 @@ function whatsappSocket(): WASocket {
   return socket;
 }
 
-export { connectToWhatsApp, whatsappSocket };
+function isConnected(): boolean {
+  return isSocketConnected;
+}
+
+export { connectToWhatsApp, whatsappSocket, isConnected };
