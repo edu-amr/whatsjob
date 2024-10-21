@@ -25,6 +25,7 @@
     "@whiskeysockets/baileys": "^6.7.8",
     "cron": "^3.1.7",
     "express": "^4.19.2",
+    "express-basic-auth": "^1.2.1",
     "link-preview-js": "^3.0.5",
     "qrcode-terminal": "^0.12.0"
   }

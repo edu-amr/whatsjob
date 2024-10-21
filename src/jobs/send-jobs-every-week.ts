@@ -46,7 +46,7 @@ async function sendBroadcastMessage() {
     const number = entry.numero;
     try {
       await socket.sendMessage(number + "@s.whatsapp.net", { text: message });
-      await delay(4000); // Use 'await' para garantir o atraso
+      await delay(4000);
     } catch (sendError) {
       console.error(`Erro ao enviar mensagem para o número ${number}:`, sendError);
     }
