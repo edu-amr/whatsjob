@@ -2,8 +2,10 @@ export async function menuResponse(
   phoneNumber: string,
   contactName: string
 ): Promise<string[]> {
+  const name = contactName || "Amigo";
+
   return [
-    `*${contactName}* no que posso te ajudar 🤖?`,
+    `*${name}* no que posso te ajudar 🤖?`,
       "*vagas*: lista de vagas. \r\n" +
       "*cancelar*: cancele o envio de vagas. \r\n" +
       "*cursos*: lista de cursos. \r\n" +

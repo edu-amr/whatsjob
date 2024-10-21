@@ -5,6 +5,8 @@ export async function subscribeResponse(
   phoneNumber: string,
   contactName: string
 ): Promise<string[]> {
+  const name = contactName || "Amigo";
+
   const { data, error } = await supabaseService
     .from(SUBSCRIBE_TABLE)
     .select("numero")
@@ -12,12 +14,12 @@ export async function subscribeResponse(
 
   if (error) {
     return [
-      `Desculpe, *${contactName}*. Tivemos um problema ao processar sua inscrição. Por favor, tente novamente mais tarde 😕.`,
+      `Desculpe, *${name}*. Tivemos um problema ao processar sua inscrição. Por favor, tente novamente mais tarde 😕.`,
     ];
   }
 
   if (data.length > 0) {
-    return [`*${contactName}*, você já está inscrito na nossa lista para receber as vagas 😁!`];
+    return [`*${name}*, você já está inscrito na nossa lista para receber as vagas 😁!`];
   }
 
   const { error: insertError } = await supabaseService
@@ -26,11 +28,11 @@ export async function subscribeResponse(
 
   if (insertError) {
     return [
-      `Desculpe, *${contactName}*. Tivemos um problema ao processar sua inscrição. Por favor, tente novamente mais tarde 😕.`,
+      `Desculpe, *${name}*. Tivemos um problema ao processar sua inscrição. Por favor, tente novamente mais tarde 😕.`,
     ];
   }
 
   return [
-    `*${contactName}*, inscrevi você na nossa lista para receber as vagas 🎉! Você também pode digitar *menu* para usar o bot 🤖.`,
+    `*${name}*, inscrevi você na nossa lista para receber as vagas 🎉! Você também pode digitar *menu* para usar o bot 🤖.`,
   ];
 }

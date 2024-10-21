@@ -2,7 +2,9 @@ export async function handleDefaultResponse(
   phoneNumber: string,
   contactName: string
 ): Promise<string[]> {
+  const name = contactName || 'Amigo';
+
   return [
-    `*${contactName}*, você deve digitar *menu* para usar o bot 😉.`
+    `*${name}*, você deve digitar *menu* para usar o bot 😉.`
   ];
 }

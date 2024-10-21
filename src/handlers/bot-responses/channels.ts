@@ -2,8 +2,10 @@ export async function channelsResponse(
   phoneNumber: string,
   contactName: string
 ): Promise<string[]> {
+  const name = contactName || "Amigo";
+  
   return [
-    `*${contactName}*, segue alguns canais que recomendo você dar uma olhada!`,
+    `*${name}*, segue alguns canais que recomendo você dar uma olhada!`,
     `1. Código Fonte TV: https://www.youtube.com/@codigofontetv \r\n` +
       `2. Mano deyvin: https://www.youtube.com/@manodeyvin \r\n` +
       `3. Rocketseat: https://www.youtube.com/@rocketseat \r\n` +
