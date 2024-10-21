@@ -1,10 +1,17 @@
-import { WASocket } from "@whiskeysockets/baileys";
 import { CronJob } from "cron";
 import { JOBS_TABLE, SUBSCRIBE_TABLE, TIME_TO_SEND_JOBS } from "../config/constants";
 import { supabaseService } from "../services/supabaseService";
 import { delay } from "../utils/delay";
+import { whatsappSocket, isConnected } from "../services/whatsappService";
 
-async function sendBroadcastMessage(socket: WASocket) {
+async function sendBroadcastMessage() {
+  if (!isConnected()) {
+    console.error('Socket não está conectado. Mensagens não serão enviadas.');
+    return;
+  }
+
+  const socket = whatsappSocket();
+
   const { data: numbersData, error: numbersError } = await supabaseService
     .from(SUBSCRIBE_TABLE)
     .select("numero");
@@ -38,18 +45,18 @@ async function sendBroadcastMessage(socket: WASocket) {
   for (const entry of numbersData) {
     const number = entry.numero;
     try {
-      await socket?.sendMessage(number + "@s.whatsapp.net", { text: message });
-      delay(4000);
+      await socket.sendMessage(number + "@s.whatsapp.net", { text: message });
+      await delay(4000); // Use 'await' para garantir o atraso
     } catch (sendError) {
       console.error(`Erro ao enviar mensagem para o número ${number}:`, sendError);
     }
   }
 }
 
-export async function initSendJobsEveryWeek(socket: WASocket) {
+export async function initSendJobsEveryWeek() {
   const job = new CronJob(
     TIME_TO_SEND_JOBS,
-    () => sendBroadcastMessage(socket),
+    () => sendBroadcastMessage(),
     null,
     true,
     "America/Los_Angeles"

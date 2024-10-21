@@ -35,7 +35,9 @@ async function connectToWhatsApp(handleIncomingMessage: (socket: WASocket, messa
   socket.ev.on('messages.upsert', async (messageUpdate) => {
     if (socket) {
       const message = messageUpdate.messages[0];
-      await handleIncomingMessage(socket, message);
+      if (!message.key.fromMe) { // Apenas processa mensagens recebidas
+        await handleIncomingMessage(socket, message);
+      }
     }
   });
 }
