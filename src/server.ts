@@ -3,7 +3,7 @@ import express from 'express';
 import { router } from './routes';
 import { PORT } from './config/constants';
 import { initSendJobsEveryWeek } from './jobs/send-jobs-every-week';
-import { handleIncomingMessage } from './handlers/messageIncomingMessage';
+import { handleIncomingMessage } from './handlers/handleIncomingMessage';
 import { connectToWhatsApp } from './services/whatsappService';
 
 async function bootstrap() {
