@@ -1,6 +1,6 @@
 import { WASocket } from "@whiskeysockets/baileys";
 import { CronJob } from "cron";
-import { JOBS_TABLE, SUBSCRIBE_TABLE } from "../config/constants";
+import { JOBS_TABLE, SUBSCRIBE_TABLE, TIME_TO_SEND_JOBS } from "../config/constants";
 import { supabaseService } from "../services/supabaseService";
 import { delay } from "../utils/delay";
 
@@ -46,12 +46,9 @@ async function sendBroadcastMessage(socket: WASocket) {
   }
 }
 
-const segundos = "*/10 * * * * *";
-const semana = "0 0 9 * * 1";
-
 export async function initSendJobsEveryWeek(socket: WASocket) {
   const job = new CronJob(
-    semana,
+    TIME_TO_SEND_JOBS,
     () => sendBroadcastMessage(socket),
     null,
     true,
