@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { RenderPages } from "./controllers/RenderPages";
 import { MessagesController } from "./controllers/MessagesController";
-import { basicAuthMiddleware } from "middlewares/basicAuthMiddleware";
+import { basicAuthMiddleware } from "./middlewares/basicAuthMiddleware";
 
 const renderPages = new RenderPages();
 const messagesController = new MessagesController();
