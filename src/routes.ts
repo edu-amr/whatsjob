@@ -5,8 +5,7 @@ import { basicAuthMiddleware } from "./middlewares/basicAuthMiddleware";
 
 const renderPages = new RenderPages();
 const messagesController = new MessagesController();
-
-export const router = Router();
+export const router = Router(); 
 
 router.get("/", renderPages.home);
 router.post("/send-message", basicAuthMiddleware, messagesController.sendMessage);
