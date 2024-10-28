@@ -13,6 +13,7 @@ import { unsubscribeResponse } from "../responses/unsubscribe";
 import { postJobResponse } from "../responses/post-job";
 import { handleDefaultResponse } from "../responses/default";
 import { ResponseMessage } from "../types";
+import { isNumberSubscribed } from '../utils/isNumberSubscribed'
 
 export enum MessageEnum {
   SUBSCRIBE = "ola, gostaria de me cadastrar na lista para receber as vagas!",
@@ -70,11 +71,16 @@ function getMessageText(message: WAMessage): string | undefined {
   }
 }
 
-function getDispatchFunction(messageContent: string): DispatchFunction | undefined {
+async function getDispatchFunction(messageContent: string, phoneNumber: string): Promise<DispatchFunction | undefined> {
   const normalizedMessage = normalizeText(messageContent);
+  const isSubscribed = await isNumberSubscribed(phoneNumber);
 
-  if (normalizedMessage.includes("cadastrar") || normalizedMessage.includes("lista")) {
+  if ((normalizedMessage.includes("cadastrar") || normalizedMessage.includes("lista")) && !isSubscribed) {
     return dispatchMap[MessageEnum.SUBSCRIBE];
+  }
+
+  if (normalizedMessage.includes("cancelar") && isSubscribed) {
+    return dispatchMap[MessageEnum.CANCEL];
   }
 
   return dispatchMap[normalizedMessage] || undefined;
@@ -87,7 +93,7 @@ export async function messageHandler(socket: WASocket, message: WAMessage) {
   let messageContent = getMessageText(message);
 
   if (!message.key.fromMe && senderId && !senderId.endsWith("@g.us") && messageContent) {
-    const dispatchFunction = getDispatchFunction(messageContent);
+    const dispatchFunction = await getDispatchFunction(messageContent, phoneNumber);
     let responseMessages: string[];
 
     if (dispatchFunction) {
