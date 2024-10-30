@@ -14,6 +14,7 @@ import { postJobResponse } from "../responses/post-job";
 import { handleDefaultResponse } from "../responses/default";
 import { ResponseMessage } from "../types";
 import { isNumberSubscribed } from '../utils/isNumberSubscribed'
+import { normalizePhoneNumber } from "../utils/normalizePhoneNumber";
 
 export enum MessageEnum {
   SUBSCRIBE = "ola, gostaria de me cadastrar na lista para receber as vagas!",
@@ -79,16 +80,22 @@ async function getDispatchFunction(messageContent: string, phoneNumber: string):
     return dispatchMap[MessageEnum.SUBSCRIBE];
   }
 
-  if (normalizedMessage.includes("cancelar") && isSubscribed) {
-    return dispatchMap[MessageEnum.CANCEL];
+  if (normalizedMessage.includes("cancelar")) {
+    if (isSubscribed) {
+      return dispatchMap[MessageEnum.CANCEL];
+    } else {
+      return async () => [`Você não está cadastrado em nossa lista.`];
+    }
   }
 
   return dispatchMap[normalizedMessage] || undefined;
 }
 
+
 export async function messageHandler(socket: WASocket, message: WAMessage) {
   const senderId = message.key.remoteJid;
-  const phoneNumber = senderId?.split("@")[0] as string;
+  const rawPhoneNumber = senderId?.split("@")[0] as string;
+  const phoneNumber = normalizePhoneNumber(rawPhoneNumber);
   const contactName = message.pushName as string;
   let messageContent = getMessageText(message);
 
