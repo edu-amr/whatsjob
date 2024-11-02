@@ -20,6 +20,7 @@ export async function menuResponse({ contactName, phoneNumber }: ResponseMessage
     "*canais*: canais de tecnologia.\r\n" +
     "*projetos*: ideias de projetos.\r\n" +
     "*feedback*: formulário de feedback.\r\n" +
+    "*postar*: postar uma vaga.\r\n" +
     "*doacao*: faça uma doação.";
 
   return [
