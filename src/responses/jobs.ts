@@ -28,8 +28,9 @@ export async function jobsResponse({
     vagas.forEach((vaga) => {
       message +=
         `\r\n\r\n` +
-        `🌎 Modalidade: ${vaga.modalidade}\r\n` +
-        `📍 ${vaga.titulo}: ${vaga.link}`;
+        `📍 ${vaga.titulo}\r\n` +
+        `🌎 ${vaga.modalidade}\r\n` +
+        `🔗 ${vaga.link}`
     });
 
     return [message];

@@ -30,7 +30,6 @@ export async function connectToWhatsApp() {
       }
     } else if (connection === 'open') {
       isSocketConnected = true;
-      sendJobsEveryWeek(socket)
       console.log('Conexão aberta');
     }
   });
