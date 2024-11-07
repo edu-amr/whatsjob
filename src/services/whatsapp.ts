@@ -1,7 +1,6 @@
 import { Boom } from '@hapi/boom';
 import makeWASocket, { DisconnectReason, useMultiFileAuthState, WASocket } from '@whiskeysockets/baileys';
 import { messageHandler } from '../handlers/messageHandler';
-import { sendJobsEveryWeek } from '../jobs/sendJobsEveryWeek';
 
 export let whatsAppSocket: WASocket;
 export let isSocketConnected = false;
